@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>10k training schedule</title>
+    <style>
+      :root {
+        --color-bg: #222233;
+        --color-border: #444455;
+        --color-text-main: #eeeeee;
+        --image-margin: 3rem;
+        --font-family: "HK Grotesk";
+        --font-family-header: "HK Grotesk";
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      [hidden] {
+        display: none !important;
+      }
+
+      @font-face {
+        font-family: HK Grotesk;
+        src: url("https://cdn.glitch.me/605e2a51-d45f-4d87-a285-9410ad350515%2FHKGrotesk-Regular.otf?v=1603136326027")
+          format("opentype");
+      }
+      @font-face {
+        font-family: HK Grotesk;
+        font-weight: bold;
+        src: url("https://cdn.glitch.me/605e2a51-d45f-4d87-a285-9410ad350515%2FHKGrotesk-Bold.otf?v=1603136323437")
+          format("opentype");
+      }
+
+      body {
+        font-family: "HK Grotesk", sans-serif;
+        background-color: var(--color-bg);
+        color: var(--color-text-main);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 3px solid var(--color-border);
+      }
+
+      thead th {
+        padding: 0.4rem;
+        border: 3px solid var(--color-border);
+      }
+
+      tbody th,
+      tbody td {
+        padding: 0.4rem;
+        border: 1px solid var(--color-border);
+      }
+
+      td:last-child {
+        text-align: center;
+      }
+
+      tr:nth-child(3n) th,
+      tr:nth-child(3n) td {
+        border-bottom-width: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+      const paces = {
+        target: { label: "10k target", pace: "6:00" },
+        easy: { label: "Easy run", pace: "7:12" },
+        vo2: { label: "VO2-max", pace: "5:27" },
+        tempo: { label: "Tempo run", pace: "6:02" },
+        speed_form: { label: "Speed form", pace: "5:03" },
+        long: { label: "Long run", pace: "8:05" },
+        yasso: { label: "Yasso 800s", pace: "5:38" },
+      };
+
+      const schedule = [
+        [
+          {
+            label: "4x1k @ 10k race pace, 2-min rest",
+            pace: "tempo",
+            done: true,
+          },
+          { label: "2x 2k @ threshold 3 min rec", done: true },
+          { label: "5k @ easy", pace: "long", done: true },
+        ],
+        [
+          { label: "6x400 (or 2mins) hard 90 sec rec", done: true },
+          { label: "15mins @ threshold", done: true },
+          { label: "6k @ easy", pace: "long", done: true },
+        ],
+        [
+          { label: "4x1k @ 10k race pace, 2-min rest", done: true },
+          { label: "2x 2k @ threshold 3 min rec", pace: "target", done: true },
+          { label: "6.5k @ easy", pace: "long" },
+        ],
+        [
+          { label: "6x400 (or 2mins) hard 90 sec rec" },
+          { label: "15mins @ threshold", pace: "target" },
+          { label: "7k @ easy", pace: "long" },
+        ],
+        [
+          { label: "alternate 1 minute hard, 1 minute easy (10 each)" },
+          { label: "2x 3k @ threshold 3 mins rec" },
+          { label: "7.5k @ easy", pace: "long" },
+        ],
+        [
+          { label: "5X1k @ 5k pace, 2 min rec", pace: "target" },
+          { label: "20 mins @ threshold", pace: "target" },
+          { label: "8k @ easy", pace: "long" },
+        ],
+        [
+          { label: "10x 200m (or 1min) hard 2 min sec rec" },
+          { label: "2x 3k@ threshold 3 min rec" },
+          { label: "9k @ easy", pace: "long" },
+        ],
+        [
+          { label: "8x400m (or 2mins) hard 90 sec rec" },
+          { label: "25 mins @ threshold", pace: "target" },
+          { label: "10k @ easy", pace: "long" },
+        ],
+        [
+          { label: "alternate 1min hard, 3 mins easy (8 each)" },
+          { label: "2x15mins @ threshold, 3 min rec", pace: "target" },
+          { label: "7k @ easy", pace: "long" },
+        ],
+        [
+          { label: "4X1k @ 10k pace, 2 min rec", pace: "target" },
+          { label: "5k", pace: "long" },
+          { label: "Race", pace: "target" },
+        ],
+      ];
+
+      const $body = document.body;
+
+      $body.innerHTML = `
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Week</th>
+        <th scope="col">Run #</th>
+        <th scope="col">Run</th>
+        <th scope="col">Pace</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${schedule
+        .map(
+          (runs, weekNo) => `
+        <tr>
+          <th scope="row" rowspan="3">
+            Week ${weekNo + 1}
+          </th>
+          ${runs
+            .map(
+              (run, runNo) => `
+            <th scope="row">Run ${runNo + 1}</th>
+            <td>${run.label}</td>
+            <td>${
+              run.pace
+                ? `${paces[run.pace].pace} <small>${paces[run.pace].label}`
+                : ""
+            }</td>
+            <td>${run.done ? "✅" : ""}</td>
+            ${runNo < 2 ? "</tr><tr>" : ""}
+          `
+            )
+            .join("")}
+        </tr>
+      `
+        )
+        .join("")}
+    </tbody>
+  </table>
+  `;
+    </script>
+  </body>
+</html>
